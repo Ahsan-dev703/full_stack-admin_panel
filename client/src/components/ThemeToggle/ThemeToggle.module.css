@@ -1,0 +1,22 @@
+.toggleBtn {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.toggleBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.icon {
+  font-size: 1.25rem;
+}

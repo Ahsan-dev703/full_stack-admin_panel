@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-main);
+  outline: none;
+  appearance: none;
+  /* Hide default arrow */
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.select:focus {
+  border-color: var(--primary);
+  background: var(--bg-card);
+}
+
+.selectError {
+  border-color: var(--danger);
+}
+
+.icon {
+  position: absolute;
+  right: 0.75rem;
+  pointer-events: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+}
+
+.errorText {
+  color: var(--danger);
+  font-size: 0.75rem;
+}

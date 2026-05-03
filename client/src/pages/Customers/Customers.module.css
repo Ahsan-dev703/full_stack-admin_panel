@@ -1,0 +1,283 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.searchWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  padding: 0 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+}
+
+.searchWrapper input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  padding: 0.7rem 0;
+  outline: none;
+  color: var(--text-main);
+}
+
+.tableWrapper {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 1.25rem;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.userEmail {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.actionRow {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  border-radius: 6px;
+  display: flex;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+
+.iconBtn:hover {
+  background: var(--bg-main);
+  color: var(--primary);
+}
+
+.profileHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.largeAvatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 4px solid var(--bg-main);
+  object-fit: cover;
+}
+
+.contactInfo {
+  background: var(--bg-main);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statBox {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.statBox label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.statBox p {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .tableWrapper {
+    border: none;
+    background: transparent;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--bg-main);
+  }
+
+  .lastChild .actionRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+    width: 100%;
+
+  }
+
+  .table td.userCell {
+    background: var(--bg-main);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    justify-content: flex-start;
+  }
+
+  .table td.userCell::before {
+    display: none;
+  }
+
+  .table td.actionRow {
+    justify-content: flex-end;
+  }
+
+  .table td.actionRow::before {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .largeAvatar {
+    width: 80px;
+    height: 80px;
+  }
+}

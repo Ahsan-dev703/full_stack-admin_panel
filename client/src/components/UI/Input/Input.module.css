@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.input {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.input:focus {
+  border-color: var(--primary);
+}
+
+.inputError {
+  border-color: var(--danger);
+}
+
+.errorText {
+  color: var(--danger);
+  font-size: 0.75rem;
+}

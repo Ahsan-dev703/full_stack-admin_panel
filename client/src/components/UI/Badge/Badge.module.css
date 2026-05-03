@@ -1,0 +1,30 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Status Variants using the theme variables */
+.success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.info {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+}

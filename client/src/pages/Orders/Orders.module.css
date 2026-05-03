@@ -1,0 +1,240 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.exportBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--text-main);
+  font-weight: 500;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.exportBtn:hover {
+  background: var(--bg-main);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  padding: 0 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+}
+
+.searchWrapper input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  padding: 0.7rem 0;
+  outline: none;
+  color: var(--text-main);
+}
+
+.dateInput {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  color: var(--text-main);
+  width: 100%;
+}
+
+.tableWrapper {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.idCell {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.customerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.customerInfo small {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.viewBtn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.statusTimeline {
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--border-color);
+}
+
+.timelineItem {
+  position: relative;
+  padding-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.dot {
+  position: absolute;
+  left: -21px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: 2px solid var(--bg-card);
+}
+
+.timelineItem[data-active="true"] .dot {
+  background: var(--success);
+  box-shadow: 0 0 0 4px rgba(var(--success-rgb), 0.2);
+}
+
+@media (max-width: 1024px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exportBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tableWrapper {
+    border: none;
+    background: transparent;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--bg-main);
+  }
+
+  .table td:last-child {
+    border-bottom: none;
+  }
+
+  .table td.idCell {
+    background: var(--bg-main);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+  }
+
+  .table td.idCell::before {
+    color: var(--text-main);
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .statusTimeline {
+    margin-left: 0.5rem;
+  }
+}

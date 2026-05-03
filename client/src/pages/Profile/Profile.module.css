@@ -1,0 +1,213 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  gap: 1.5rem;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.statsGrid .stat {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Identity Card */
+.identityCard {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--bg-main);
+  box-shadow: var(--shadow-sm);
+}
+
+.uploadBtn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
+}
+
+.uploadBtn:hover {
+  transform: scale(1.1);
+}
+
+.roleBadge {
+  display: inline-block;
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.metaList {
+  margin-top: 2rem;
+  text-align: left;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Form Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-main);
+  outline: none;
+}
+
+.inputGroup input:focus {
+  border-color: var(--primary);
+}
+
+/* Activity Styles */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.activityItem {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.activityIcon {
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+
+.activityContent p {
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.activityContent span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Security Row */
+.securityHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.securityHeader h4 {
+  font-weight: 600;
+}
+
+.securityHeader p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .leftCol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .leftCol {
+    grid-template-columns: 1fr;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
