@@ -6,6 +6,9 @@ const initialState = {
   filters: {
     searchTerm: "",
     status: "all",
+    role: "all",
+    joinedDate: "",
+    sortOption: "newest",
   },
   selectedCustomerId: null,
   status: "idle",
@@ -21,6 +24,24 @@ const customersSlice = createSlice({
     },
     setStatusFilter: (state, action) => {
       state.filters.status = action.payload;
+    },
+    setRoleFilter: (state, action) => {
+      state.filters.role = action.payload;
+    },
+    setJoinedDate: (state, action) => {
+      state.filters.joinedDate = action.payload;
+    },
+    setSortOption: (state, action) => {
+      state.filters.sortOption = action.payload;
+    },
+    clearFilters: (state) => {
+      state.filters = {
+        searchTerm: "",
+        status: "all",
+        role: "all",
+        joinedDate: "",
+        sortOption: "newest",
+      };
     },
     setSelectedCustomerId: (state, action) => {
       state.selectedCustomerId = action.payload;
@@ -48,6 +69,10 @@ const customersSlice = createSlice({
 export const {
   setSearchTerm,
   setStatusFilter,
+  setRoleFilter,
+  setJoinedDate,
+  setSortOption,
+  clearFilters,
   setSelectedCustomerId,
   clearCustomerSelection,
 } = customersSlice.actions;

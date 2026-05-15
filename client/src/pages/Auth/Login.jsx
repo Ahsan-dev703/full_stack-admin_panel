@@ -6,6 +6,7 @@ import LoginForm from "./LoginForm";
 import { loginUser } from "@/store/features/auth/authThunks";
 import { selectIsAuthenticated } from "@/store/features/auth/authSelectors";
 import styles from "./Login.module.css";
+import Loader from "@/components/UI/Loader/Loader";
 
 const Login = () => {
   const navigate = useNavigate();

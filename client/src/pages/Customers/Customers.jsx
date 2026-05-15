@@ -5,18 +5,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/store/features/customers/customersThunks";
 import {
   setSearchTerm,
+  setStatusFilter,
+  setRoleFilter,
+  setJoinedDate,
+  setSortOption,
+  clearFilters,
   setSelectedCustomerId,
   clearCustomerSelection,
-  setStatusFilter,
 } from "@/store/features/customers/customersSlice";
 
 // Redux Selectors
 import {
-  selectFilteredCustomers,
+  selectSortedCustomers,
+  selectCustomerFilters,
   selectCurrentCustomer,
 } from "@/store/features/customers/customersSelectors";
 
 // UI Components
+import EmptyState from "@/components/UI/EmptyState/EmptyState";
 import Modal from "@/components/UI/Modal/Modal";
 import CustomerHeader from "./CustomerHeader";
 import CustomerFilters from "./CustomerFilters";
@@ -24,7 +30,11 @@ import CustomerTable from "./CustomerTable";
 import CustomerProfile from "./CustomerProfile";
 
 // Constants & Styles
-import { CUSTOMER_STATUSES } from "@/constants/customers";
+import {
+  CUSTOMER_STATUSES,
+  CUSTOMER_ROLES,
+  CUSTOMER_SORT_OPTIONS,
+} from "@/constants/customers";
 import styles from "./Customers.module.css";
 import Loader from "@/components/UI/Loader/Loader";
 
@@ -32,19 +42,27 @@ const Customers = () => {
   const dispatch = useDispatch();
 
   // Selectors with fallbacks to handle initial/undefined states
-  const filteredCustomers = useSelector(selectFilteredCustomers) || [];
+  const customers = useSelector(selectSortedCustomers) || [];
+  const filters = useSelector(selectCustomerFilters) || {
+    searchTerm: "",
+    status: "all",
+    role: "all",
+    joinedDate: "",
+    sortOption: "newest",
+  };
   const selectedCustomer = useSelector(selectCurrentCustomer);
 
-  // Directly accessing status to manage the fetch lifecycle
-  const { status, error } = useSelector(
+  const { status: fetchStatus, error } = useSelector(
     (state) => state.customers || { status: "idle", error: null },
   );
 
+  const { searchTerm, status, role, joinedDate, sortOption } = filters;
+
   useEffect(() => {
-    if (status === "idle") {
+    if (fetchStatus === "idle") {
       dispatch(fetchCustomers());
     }
-  }, [dispatch, status]);
+  }, [dispatch, fetchStatus]);
 
   return (
     <div className={styles.container}>
@@ -55,20 +73,38 @@ const Customers = () => {
       />
 
       <CustomerFilters
+        searchTerm={searchTerm}
+        status={status}
+        role={role}
+        joinedDate={joinedDate}
+        sortOption={sortOption}
+        statusOptions={CUSTOMER_STATUSES}
+        roleOptions={CUSTOMER_ROLES}
+        sortOptions={CUSTOMER_SORT_OPTIONS}
         onSearchChange={(val) => dispatch(setSearchTerm(val))}
         onStatusChange={(val) => dispatch(setStatusFilter(val))}
-        statusOptions={CUSTOMER_STATUSES}
+        onRoleChange={(val) => dispatch(setRoleFilter(val))}
+        onJoinedDateChange={(val) => dispatch(setJoinedDate(val))}
+        onSortChange={(val) => dispatch(setSortOption(val))}
+        onClearFilters={() => dispatch(clearFilters())}
       />
 
-      {status === "loading" ? (
+      {fetchStatus === "loading" ? (
         <Loader fullScreen text="Loading customers..." />
-      ) : status === "failed" ? (
+      ) : fetchStatus === "failed" ? (
         <div className={styles.error}>
           {error || "Unable to load customers, please try again."}
         </div>
+      ) : customers.length === 0 ? (
+        <EmptyState
+          title="No matching customers found"
+          message="Try another search or clear filters to see all customers."
+          actionLabel="Clear filters"
+          onAction={() => dispatch(clearFilters())}
+        />
       ) : (
         <CustomerTable
-          customers={filteredCustomers}
+          customers={customers}
           onSelectCustomer={(customer) =>
             dispatch(setSelectedCustomerId(customer.id))
           }

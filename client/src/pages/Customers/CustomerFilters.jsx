@@ -1,22 +1,62 @@
-import { MdSearch } from "react-icons/md";
-import Card from "@/components/UI/Card/Card";
 import Select from "@/components/UI/Select/Select";
-import styles from "./Customers.module.css";
+import Input from "@/components/UI/Input/Input";
+import SearchBar from "@/components/Filters/SearchBar";
+import FilterControls from "@/components/Filters/FilterControls";
 
-const CustomerFilters = ({ onSearchChange, statusOptions }) => (
-  <Card className={styles.filterCard}>
-    <div className={styles.filters}>
-      <div className={styles.searchWrapper}>
-        <MdSearch />
-        <input
-          type="text"
-          placeholder="Search by name, email, or ID..."
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </div>
-      <Select options={statusOptions} defaultValue="all" />
-    </div>
-  </Card>
+const CustomerFilters = ({
+  searchTerm,
+  status,
+  role,
+  joinedDate,
+  sortOption,
+  statusOptions,
+  roleOptions,
+  sortOptions,
+  onSearchChange,
+  onStatusChange,
+  onRoleChange,
+  onJoinedDateChange,
+  onSortChange,
+  onClearFilters,
+}) => (
+  <FilterControls
+    searchBar={
+      <SearchBar
+        value={searchTerm}
+        onChange={onSearchChange}
+        placeholder="Search by name, email, or phone..."
+      />
+    }
+    onClearFilters={onClearFilters}
+  >
+    <Select
+      label="Status"
+      options={statusOptions}
+      value={status}
+      onChange={(e) => onStatusChange(e.target.value)}
+    />
+
+    <Select
+      label="Role"
+      options={roleOptions}
+      value={role}
+      onChange={(e) => onRoleChange(e.target.value)}
+    />
+
+    <Input
+      label="Joined After"
+      type="date"
+      value={joinedDate || ""}
+      onChange={(e) => onJoinedDateChange(e.target.value)}
+    />
+
+    <Select
+      label="Sort By"
+      options={sortOptions}
+      value={sortOption}
+      onChange={(e) => onSortChange(e.target.value)}
+    />
+  </FilterControls>
 );
 
 export default CustomerFilters;

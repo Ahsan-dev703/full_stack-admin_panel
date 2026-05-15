@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateProfile } from "@/store/features/auth/authSlice";
 import Card from "@/components/UI/Card/Card";
@@ -7,24 +7,45 @@ import styles from "./Profile.module.css";
 
 const ProfileForm = ({ data }) => {
   const dispatch = useDispatch();
-
-  // Local state for the "Draft" before saving
   const [formFields, setFormFields] = useState({
-    name: data.name,
-    role: data.role,
-    email: data.email,
+    name: data.name || "",
+    role: data.role || "",
+    email: data.email || "",
+    avatar: data.avatar || "",
   });
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    setFormFields({
+      name: data.name || "",
+      role: data.role || "",
+      email: data.email || "",
+      avatar: data.avatar || "",
+    });
+  }, [data]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormFields((prev) => ({ ...prev, [name]: value }));
   };
 
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Dispatch to Redux store
-    dispatch(updateProfile(formFields));
-    alert("Profile updated successfully in Redux Store!");
+    if (!formFields.name.trim() || !isValidEmail(formFields.email)) {
+      setSuccessMessage("Please enter a valid name and email address.");
+      return;
+    }
+
+    dispatch(
+      updateProfile({
+        name: formFields.name.trim(),
+        email: formFields.email.trim(),
+        avatar: formFields.avatar.trim(),
+      }),
+    );
+    setSuccessMessage("Profile updated successfully.");
   };
 
   return (
@@ -50,6 +71,7 @@ const ProfileForm = ({ data }) => {
             />
           </div>
         </div>
+
         <div className={styles.inputGroup}>
           <label>Email Address</label>
           <input
@@ -59,9 +81,23 @@ const ProfileForm = ({ data }) => {
             onChange={handleChange}
           />
         </div>
+
+        <div className={styles.inputGroup}>
+          <label>Avatar URL</label>
+          <input
+            type="text"
+            name="avatar"
+            value={formFields.avatar}
+            onChange={handleChange}
+          />
+        </div>
+
         <Button type="submit" className={styles.submitBtn}>
-          Update Profile
+          Save Profile
         </Button>
+        {successMessage && (
+          <p className={styles.successText}>{successMessage}</p>
+        )}
       </form>
     </Card>
   );

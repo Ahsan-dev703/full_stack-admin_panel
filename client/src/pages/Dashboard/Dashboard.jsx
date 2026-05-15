@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 // Redux Actions & Selectors
 import { fetchDashboardData } from "@/store/features/dashboard/dashboardThunks";
 import { selectDashboardData } from "@/store/features/dashboard/dashboardSelectors";
+import { selectCurrentUser } from "@/store/features/auth/authSelectors";
 
 // UI Components
 import Badge from "@/components/UI/Badge/Badge";
@@ -41,6 +42,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const { stats, revenueData, categoryData, recentOrders, status } =
     useSelector(selectDashboardData);
+  const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
     if (status === "idle") {
@@ -52,16 +54,17 @@ const Dashboard = () => {
     return <Loader fullScreen text="Loading dashboard data..." />;
   }
 
-  // Error State Handling (Optional but recommended)
   if (status === "failed") {
     return <div className={styles.error}>Error loading dashboard data.</div>;
   }
+
+  const userName = user?.name ? `Welcome back, ${user.name}` : "Welcome back";
 
   return (
     <div className={styles.container}>
       <DashboardHeader
         title="Dashboard Overview"
-        subtitle="Welcome back, here is what's happening today."
+        subtitle={`${userName}, here is what's happening today.`}
       />
 
       <section className={styles.statsGrid}>

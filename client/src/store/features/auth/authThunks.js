@@ -2,16 +2,28 @@ import { loginStart, loginSuccess, loginFailure, logout } from "./authSlice";
 import { saveAuthState, clearAuthState } from "@/utils/authStorage";
 
 const DUMMY_CREDENTIALS = {
-  email: "admin@gmail.com",
+  email: "muhammadahsanali641@gmail.com",
   password: "admin123",
 };
 
 const DUMMY_USER = {
   id: 1,
-  name: "Muhammad Ahsan",
+  name: "Muhammad Ahsan Ali",
   email: DUMMY_CREDENTIALS.email,
   role: "Admin",
   avatar: "https://i.pravatar.cc/150?img=12",
+  settings: {
+    notifications: {
+      email: true,
+      sms: false,
+      push: true,
+    },
+    accountPreferences: {
+      language: "English",
+      timezone: "UTC",
+      weeklySummary: true,
+    },
+  },
 };
 
 export const loginUser =

@@ -8,26 +8,61 @@ export const selectCustomerFilters = (state) =>
 export const selectSelectedCustomerId = (state) =>
   selectCustomersState(state).selectedCustomerId;
 
-// Memoized filtered list
-export const selectFilteredCustomers = createSelector(
+export const selectCurrentCustomer = createSelector(
+  [selectAllCustomers, selectSelectedCustomerId],
+  (customers, selectedId) => customers.find((c) => c.id === selectedId) || null,
+);
+
+export const selectSearchedCustomers = createSelector(
   [selectAllCustomers, selectCustomerFilters],
   (customers, filters) => {
-    const { searchTerm, status } = filters;
+    const search = filters.searchTerm.trim().toLowerCase();
+    if (!search) {
+      return customers;
+    }
+
     return customers.filter((customer) => {
-      const matchesSearch =
-        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const searchableFields = [customer.name, customer.email, customer.phone];
 
-      const matchesStatus = status === "all" || customer.status === status;
-
-      return matchesSearch && matchesStatus;
+      return searchableFields.some((field) =>
+        String(field).toLowerCase().includes(search),
+      );
     });
   },
 );
 
-// Get the actual object for the modal
-export const selectCurrentCustomer = createSelector(
-  [selectAllCustomers, selectSelectedCustomerId],
-  (customers, selectedId) => customers.find((c) => c.id === selectedId) || null,
+export const selectFilteredCustomers = createSelector(
+  [selectSearchedCustomers, selectCustomerFilters],
+  (customers, filters) => {
+    const { status, role, joinedDate } = filters;
+
+    return customers.filter((customer) => {
+      const matchesStatus = status === "all" || customer.status === status;
+      const matchesRole = role === "all" || customer.role === role;
+      const matchesJoinedDate =
+        !joinedDate || customer.joinDate.startsWith(joinedDate);
+
+      return matchesStatus && matchesRole && matchesJoinedDate;
+    });
+  },
+);
+
+export const selectSortedCustomers = createSelector(
+  [selectFilteredCustomers, selectCustomerFilters],
+  (customers, filters) => {
+    const sorted = [...customers];
+
+    switch (filters.sortOption) {
+      case "oldest":
+        return sorted.sort(
+          (a, b) => new Date(a.joinDate) - new Date(b.joinDate),
+        );
+      case "alphabetical":
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      default:
+        return sorted.sort(
+          (a, b) => new Date(b.joinDate) - new Date(a.joinDate),
+        );
+    }
+  },
 );

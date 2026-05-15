@@ -4,9 +4,11 @@ import { fetchOrders } from "./ordersThunks";
 const initialState = {
   items: [],
   filters: {
-    status: "all",
     searchTerm: "",
-    date: null,
+    status: "all",
+    paymentMethod: "all",
+    date: "",
+    sortOption: "latest",
   },
   selectedOrderId: null,
   status: "idle",
@@ -17,11 +19,29 @@ const ordersSlice = createSlice({
   name: "orders",
   initialState,
   reducers: {
+    setSearchTerm: (state, action) => {
+      state.filters.searchTerm = action.payload;
+    },
     setFilterStatus: (state, action) => {
       state.filters.status = action.payload;
     },
-    setSearchTerm: (state, action) => {
-      state.filters.searchTerm = action.payload;
+    setPaymentMethod: (state, action) => {
+      state.filters.paymentMethod = action.payload;
+    },
+    setDateFilter: (state, action) => {
+      state.filters.date = action.payload;
+    },
+    setSortOption: (state, action) => {
+      state.filters.sortOption = action.payload;
+    },
+    clearFilters: (state) => {
+      state.filters = {
+        searchTerm: "",
+        status: "all",
+        paymentMethod: "all",
+        date: "",
+        sortOption: "latest",
+      };
     },
     setSelectedOrderId: (state, action) => {
       state.selectedOrderId = action.payload;
@@ -47,9 +67,14 @@ const ordersSlice = createSlice({
 });
 
 export const {
-  setFilterStatus,
   setSearchTerm,
+  setFilterStatus,
+  setPaymentMethod,
+  setDateFilter,
+  setSortOption,
+  clearFilters,
   setSelectedOrderId,
   clearOrderSelection,
 } = ordersSlice.actions;
+
 export default ordersSlice.reducer;

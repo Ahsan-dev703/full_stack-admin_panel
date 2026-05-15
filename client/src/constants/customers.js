@@ -5,6 +5,19 @@ export const CUSTOMER_STATUSES = [
   { value: "suspended", label: "Suspended" },
 ];
 
+export const CUSTOMER_ROLES = [
+  { value: "all", label: "All Roles" },
+  { value: "buyer", label: "Buyer" },
+  { value: "seller", label: "Seller" },
+  { value: "vip", label: "VIP" },
+];
+
+export const CUSTOMER_SORT_OPTIONS = [
+  { value: "newest", label: "Newest Customers" },
+  { value: "oldest", label: "Oldest Customers" },
+  { value: "alphabetical", label: "Alphabetical" },
+];
+
 export const DUMMY_CUSTOMERS = [
   {
     id: "CUST-101",
@@ -15,6 +28,7 @@ export const DUMMY_CUSTOMERS = [
     orders: 24,
     totalSpent: 1240.5,
     status: "active",
+    role: "buyer",
     joinDate: "2025-11-12",
   },
   {
@@ -26,6 +40,7 @@ export const DUMMY_CUSTOMERS = [
     orders: 12,
     totalSpent: 850.0,
     status: "suspended",
+    role: "seller",
     joinDate: "2026-01-20",
   },
   {
@@ -37,6 +52,7 @@ export const DUMMY_CUSTOMERS = [
     orders: 0,
     totalSpent: 0.0,
     status: "inactive",
+    role: "vip",
     joinDate: "2026-04-15",
   },
 ];

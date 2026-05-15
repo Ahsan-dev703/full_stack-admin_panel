@@ -1,23 +1,62 @@
-import { MdSearch } from "react-icons/md";
-import Card from "@/components/UI/Card/Card";
 import Select from "@/components/UI/Select/Select";
-import styles from "./Orders.module.css";
+import Input from "@/components/UI/Input/Input";
+import SearchBar from "@/components/Filters/SearchBar";
+import FilterControls from "@/components/Filters/FilterControls";
 
-const OrderFilters = ({ filterStatus, onStatusChange, statuses }) => (
-  <Card className={styles.filterCard}>
-    <div className={styles.filters}>
-      <div className={styles.searchWrapper}>
-        <MdSearch />
-        <input type="text" placeholder="Search by Order ID or Customer..." />
-      </div>
-      <Select
-        options={statuses}
-        value={filterStatus}
-        onChange={(e) => onStatusChange(e.target.value)}
+const OrderFilters = ({
+  searchTerm,
+  filterStatus,
+  paymentMethod,
+  selectedDate,
+  sortOption,
+  statuses,
+  paymentMethods,
+  sortOptions,
+  onSearchChange,
+  onStatusChange,
+  onPaymentMethodChange,
+  onDateChange,
+  onSortChange,
+  onClearFilters,
+}) => (
+  <FilterControls
+    searchBar={
+      <SearchBar
+        value={searchTerm}
+        onChange={onSearchChange}
+        placeholder="Search by order ID, customer, email, or status..."
       />
-      <input type="date" className={styles.dateInput} />
-    </div>
-  </Card>
+    }
+    onClearFilters={onClearFilters}
+  >
+    <Select
+      label="Status"
+      options={statuses}
+      value={filterStatus}
+      onChange={(e) => onStatusChange(e.target.value)}
+    />
+
+    <Select
+      label="Payment"
+      options={paymentMethods}
+      value={paymentMethod}
+      onChange={(e) => onPaymentMethodChange(e.target.value)}
+    />
+
+    <Input
+      label="Date"
+      type="date"
+      value={selectedDate || ""}
+      onChange={(e) => onDateChange(e.target.value)}
+    />
+
+    <Select
+      label="Sort By"
+      options={sortOptions}
+      value={sortOption}
+      onChange={(e) => onSortChange(e.target.value)}
+    />
+  </FilterControls>
 );
 
 export default OrderFilters;

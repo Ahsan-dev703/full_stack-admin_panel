@@ -1,65 +1,80 @@
-// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { loadState, saveState } from "@/utils/storage";
 
-// // Thunk to simulate API saving
-// export const saveSettings = createAsyncThunk(
-//   "settings/save",
-//   async (settingsData) => {
-//     await new Promise((resolve) => setTimeout(resolve, 1000));
-//     return settingsData;
-//   },
-// );
+const SETTINGS_STORAGE_KEY = "dashboard_settings_state";
 
-// const initialState = {
-//   general: {
-//     storeName: "Modern Store Admin",
-//     storeEmail: "admin@store.com",
-//     maintenanceMode: false,
-//   },
-//   security: {
-//     twoFactor: true,
-//   },
-//   activeTab: "general",
-//   isSaving: false,
-//   showSuccess: false,
-// };
+const defaultState = {
+  notifications: {
+    email: true,
+    sms: false,
+    push: true,
+  },
+  accountPreferences: {
+    language: "English",
+    timezone: "UTC",
+    weeklySummary: true,
+  },
+  isSaving: false,
+  showSuccess: false,
+};
 
-// const settingsSlice = createSlice({
-//   name: "settings",
-//   initialState,
-//   reducers: {
-//     setTab: (state, action) => {
-//       state.activeTab = action.payload;
-//     },
-//     updateGeneralField: (state, action) => {
-//       state.general = { ...state.general, ...action.payload };
-//     },
-//     toggleMaintenance: (state) => {
-//       state.general.maintenanceMode = !state.general.maintenanceMode;
-//     },
-//     toggle2FA: (state) => {
-//       state.security.twoFactor = !state.security.twoFactor;
-//     },
-//     dismissSuccess: (state) => {
-//       state.showSuccess = false;
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(saveSettings.pending, (state) => {
-//         state.isSaving = true;
-//       })
-//       .addCase(saveSettings.fulfilled, (state) => {
-//         state.isSaving = false;
-//         state.showSuccess = true;
-//       });
-//   },
-// });
+const persistedSettings = loadState(SETTINGS_STORAGE_KEY);
 
-// export const {
-//   setTab,
-//   updateGeneralField,
-//   toggleMaintenance,
-//   toggle2FA,
-//   dismissSuccess,
-// } = settingsSlice.actions;
-// export default settingsSlice.reducer;
+export const saveSettings = createAsyncThunk(
+  "settings/saveSettings",
+  async (_, { getState }) => {
+    const settingsState = getState().settings;
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    saveState(SETTINGS_STORAGE_KEY, settingsState);
+    return settingsState;
+  },
+);
+
+const settingsSlice = createSlice({
+  name: "settings",
+  initialState: persistedSettings || defaultState,
+  reducers: {
+    updateNotificationSettings: (state, action) => {
+      state.notifications = { ...state.notifications, ...action.payload };
+      saveState(SETTINGS_STORAGE_KEY, state);
+    },
+    updateAccountPreferences: (state, action) => {
+      state.accountPreferences = {
+        ...state.accountPreferences,
+        ...action.payload,
+      };
+      saveState(SETTINGS_STORAGE_KEY, state);
+    },
+    resetSettings: (state) => {
+      Object.assign(state, defaultState);
+      saveState(SETTINGS_STORAGE_KEY, state);
+    },
+    dismissSuccess: (state) => {
+      state.showSuccess = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(saveSettings.pending, (state) => {
+        state.isSaving = true;
+        state.showSuccess = false;
+      })
+      .addCase(saveSettings.fulfilled, (state) => {
+        state.isSaving = false;
+        state.showSuccess = true;
+      })
+      .addCase(saveSettings.rejected, (state) => {
+        state.isSaving = false;
+      });
+  },
+});
+
+export const {
+  updateTheme,
+  updateNotificationSettings,
+  updateAccountPreferences,
+  resetSettings,
+  dismissSuccess,
+} = settingsSlice.actions;
+
+export default settingsSlice.reducer;

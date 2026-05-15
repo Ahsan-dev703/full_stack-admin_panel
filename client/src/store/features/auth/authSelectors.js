@@ -7,6 +7,23 @@ export const selectCurrentUser = createSelector(
   (auth) => auth.user || null,
 );
 
+export const selectProfileData = createSelector(
+  [selectCurrentUser],
+  (user) => ({
+    id: user?.id,
+    name: user?.name,
+    email: user?.email,
+    role: user?.role,
+    avatar: user?.avatar,
+    settings: user?.settings || {},
+  }),
+);
+
+export const selectUserSettings = createSelector(
+  [selectCurrentUser],
+  (user) => user?.settings || null,
+);
+
 export const selectIsAuthenticated = createSelector(
   [selectAuthState],
   (auth) => auth.isAuthenticated,
