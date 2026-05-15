@@ -1,51 +1,32 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 
-// Async Thunk for Login
-export const loginUser = createAsyncThunk(
-  "auth/login",
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const response = await axios.post("/api/auth/login", credentials);
-      localStorage.setItem("token", response.data.token);
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
+const initialState = {
+  user: {
+    id: "USR-001",
+    name: "Admin User",
+    email: "admin@dashboard.com",
+    avatar: "https://i.pravatar.cc/150?u=admin",
+    phone: "+1 (555) 123-4567",
+    location: "New York, USA",
+    role: "Super Admin",
   },
-);
+  isAuthenticated: true,
+  loading: false,
+};
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    token: localStorage.getItem("token"),
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
+    updateProfile: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+    },
     logout: (state) => {
       state.user = null;
-      state.token = null;
-      localStorage.removeItem("token");
+      state.isAuthenticated = false;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { updateProfile, logout } = authSlice.actions;
 export default authSlice.reducer;

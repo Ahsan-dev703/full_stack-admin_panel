@@ -1,3 +1,11 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// Redux Actions & Selectors
+import { fetchDashboardData } from "@/store/features/dashboard/dashboardThunks";
+import { selectDashboardData } from "@/store/features/dashboard/dashboardSelectors";
+
+// UI Components
 import Badge from "@/components/UI/Badge/Badge";
 import Card from "@/components/UI/Card/Card";
 import {
@@ -5,6 +13,8 @@ import {
   OrdersBarChart,
   CategoryPieChart,
 } from "@/components/Analytics/DashboardCharts";
+
+// Icons
 import {
   MdTrendingUp,
   MdAttachMoney,
@@ -12,86 +22,40 @@ import {
   MdPeople,
 } from "react-icons/md";
 
-// Sub-components
+// Page Sub-components
 import DashboardHeader from "@/pages/Dashboard/DashboardHeader";
 import StatCard from "@/pages/Dashboard/StatCard";
 import RecentOrdersTable from "@/pages/Dashboard/RecentOrdersTable";
 
 import styles from "./Dashboard.module.css";
+import Loader from "@/components/UI/Loader/Loader";
 
-// Mock Data
-const revenueData = [
-  { name: "Jan", revenue: 4000 },
-  { name: "Feb", revenue: 3000 },
-  { name: "Mar", revenue: 5000 },
-  { name: "Apr", revenue: 4500 },
-  { name: "May", revenue: 6000 },
-  { name: "Jun", revenue: 5500 },
-];
-
-const categoryData = [
-  { name: "Electronics", value: 400 },
-  { name: "Fashion", value: 700 },
-  { name: "Home", value: 300 },
-  { name: "Books", value: 200 },
-];
+const iconMap = {
+  1: <MdAttachMoney />,
+  2: <MdShoppingCart />,
+  3: <MdPeople />,
+  4: <MdTrendingUp />,
+};
 
 const Dashboard = () => {
-  const stats = [
-    {
-      id: 1,
-      title: "Total Revenue",
-      value: "$45,231.89",
-      trend: "+12.5%",
-      icon: <MdAttachMoney />,
-      color: "var(--success)",
-    },
-    {
-      id: 2,
-      title: "Total Orders",
-      value: "1,205",
-      trend: "+3.2%",
-      icon: <MdShoppingCart />,
-      color: "var(--primary)",
-    },
-    {
-      id: 3,
-      title: "New Customers",
-      value: "482",
-      trend: "+18.1%",
-      icon: <MdPeople />,
-      color: "var(--warning)",
-    },
-    {
-      id: 4,
-      title: "Active Sessions",
-      value: "156",
-      trend: "-2.4%",
-      icon: <MdTrendingUp />,
-      color: "var(--info)",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { stats, revenueData, categoryData, recentOrders, status } =
+    useSelector(selectDashboardData);
 
-  const recentOrders = [
-    {
-      id: 1,
-      customer: "Customer Name 1",
-      status: "Shipped",
-      amount: "$240.00",
-    },
-    {
-      id: 2,
-      customer: "Customer Name 2",
-      status: "Shipped",
-      amount: "$240.00",
-    },
-    {
-      id: 3,
-      customer: "Customer Name 3",
-      status: "Shipped",
-      amount: "$240.00",
-    },
-  ];
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchDashboardData());
+    }
+  }, [status, dispatch]);
+
+  if (status === "loading") {
+    return <Loader />;
+  }
+
+  // Error State Handling (Optional but recommended)
+  if (status === "failed") {
+    return <div className={styles.error}>Error loading dashboard data.</div>;
+  }
 
   return (
     <div className={styles.container}>
@@ -102,7 +66,7 @@ const Dashboard = () => {
 
       <section className={styles.statsGrid}>
         {stats.map((stat) => (
-          <StatCard key={stat.id} {...stat} />
+          <StatCard key={stat.id} {...stat} icon={iconMap[stat.id]} />
         ))}
       </section>
 
@@ -130,7 +94,7 @@ const Dashboard = () => {
             <OrdersBarChart
               data={revenueData.map((d) => ({
                 name: d.name,
-                orders: d.revenue / 100,
+                orders: Math.floor(d.revenue / 100),
               }))}
             />
           </Card>

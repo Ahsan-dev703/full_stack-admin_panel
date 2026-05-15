@@ -1,4 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// Redux Actions & Selectors
+import {
+  setSearchTerm,
+  setCategory,
+  clearFilters,
+} from "@/store/features/products/productsSlice";
+import {
+  selectFilteredProducts,
+  selectFilters,
+} from "@/store/features/products/productsSelectors";
+import { fetchProducts } from "@/store/features/products/productsThunks";
+
+// UI Components
 import Modal from "@/components/UI/Modal/Modal";
 import EmptyState from "@/components/UI/EmptyState/EmptyState";
 import ProductTable from "./ProductTable";
@@ -8,26 +23,25 @@ import ProductHeader from "@/pages/Products/ProductHeader";
 import ProductFilters from "@/pages/Products/ProductFilters";
 import ProductForm from "@/pages/Products/ProductForm";
 
-import { DUMMY_PRODUCTS, PRODUCT_CATEGORIES } from "@/constants/products";
+// Constants
+import { PRODUCT_CATEGORIES } from "@/constants/products";
 import styles from "./Products.module.css";
+import Loader from "@/components/UI/Loader/Loader";
 
 const Products = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("all");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleClearFilters = () => {
-    setSearchTerm("");
-    setCategory("all");
+  const filteredProducts = useSelector(selectFilteredProducts) || [];
+  const { searchTerm, category } = useSelector(selectFilters) || {
+    searchTerm: "",
+    category: "all",
   };
 
-  const filteredProducts = DUMMY_PRODUCTS.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory = category === "all" || product.category === category;
-    return matchesSearch && matchesCategory;
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
@@ -35,9 +49,9 @@ const Products = () => {
 
       <ProductFilters
         searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
+        onSearchChange={(val) => dispatch(setSearchTerm(val))}
         category={category}
-        onCategoryChange={setCategory}
+        onCategoryChange={(val) => dispatch(setCategory(val))}
         categories={PRODUCT_CATEGORIES}
       />
 
@@ -48,7 +62,7 @@ const Products = () => {
           title="No products found"
           message="Try adjusting your search or filters to find what you're looking for."
           actionLabel="Clear Filters"
-          onAction={handleClearFilters}
+          onAction={() => dispatch(clearFilters())}
         />
       )}
 
@@ -61,6 +75,7 @@ const Products = () => {
           categories={PRODUCT_CATEGORIES}
           onSubmit={(e) => {
             e.preventDefault();
+            // Future: dispatch(addProduct(formData))
             setIsModalOpen(false);
           }}
         />

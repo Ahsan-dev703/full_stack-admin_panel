@@ -1,46 +1,83 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// Redux Actions & Thunks
+import { fetchCustomers } from "@/store/features/customers/customersThunks";
+import {
+  setSearchTerm,
+  setSelectedCustomerId,
+  clearCustomerSelection,
+  setStatusFilter,
+} from "@/store/features/customers/customersSlice";
+
+// Redux Selectors
+import {
+  selectFilteredCustomers,
+  selectCurrentCustomer,
+} from "@/store/features/customers/customersSelectors";
+
+// UI Components
 import Modal from "@/components/UI/Modal/Modal";
 import CustomerHeader from "./CustomerHeader";
 import CustomerFilters from "./CustomerFilters";
 import CustomerTable from "./CustomerTable";
 import CustomerProfile from "./CustomerProfile";
 
-import { DUMMY_CUSTOMERS, CUSTOMER_STATUSES } from "@/constants/customers";
+// Constants & Styles
+import { CUSTOMER_STATUSES } from "@/constants/customers";
 import styles from "./Customers.module.css";
+import Loader from "@/components/UI/Loader/Loader";
 
 const Customers = () => {
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
 
-  // You can implement filtering logic here based on searchTerm
-  const filteredCustomers = DUMMY_CUSTOMERS.filter(
-    (c) =>
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  // Selectors with fallbacks to handle initial/undefined states
+  const filteredCustomers = useSelector(selectFilteredCustomers) || [];
+  const selectedCustomer = useSelector(selectCurrentCustomer);
+
+  // Directly accessing status to manage the fetch lifecycle
+  const { status } = useSelector(
+    (state) => state.customers || { status: "idle" },
   );
+
+  useEffect(() => {
+    // Only fetch if we haven't already started or succeeded
+    if (status === "idle") {
+      dispatch(fetchCustomers());
+    }
+  }, [dispatch, status]);
 
   return (
     <div className={styles.container}>
       <CustomerHeader
-        onAddCustomer={() => console.log("Add Customer Clicked")}
+        onAddCustomer={() => {
+          /* Logic for Add Customer Modal */
+        }}
       />
 
       <CustomerFilters
-        onSearchChange={setSearchTerm}
+        onSearchChange={(val) => dispatch(setSearchTerm(val))}
+        onStatusChange={(val) => dispatch(setStatusFilter(val))}
         statusOptions={CUSTOMER_STATUSES}
       />
 
-      <CustomerTable
-        customers={filteredCustomers}
-        onSelectCustomer={setSelectedCustomer}
-      />
+      {status === "loading" && filteredCustomers.length === 0 ? (
+        <Loader />
+      ) : (
+        <CustomerTable
+          customers={filteredCustomers}
+          onSelectCustomer={(customer) =>
+            dispatch(setSelectedCustomerId(customer.id))
+          }
+        />
+      )}
 
       <Modal
         isOpen={!!selectedCustomer}
-        onClose={() => setSelectedCustomer(null)}
+        onClose={() => dispatch(clearCustomerSelection())}
         title="Customer Profile"
       >
-        <CustomerProfile customer={selectedCustomer} />
+        {selectedCustomer && <CustomerProfile customer={selectedCustomer} />}
       </Modal>
     </div>
   );

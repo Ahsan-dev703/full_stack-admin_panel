@@ -1,16 +1,49 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// Redux Actions & Thunks
+import { fetchOrders } from "@/store/features/orders/ordersThunks";
+import {
+  setFilterStatus,
+  setSearchTerm,
+  setSelectedOrderId,
+  clearOrderSelection,
+} from "@/store/features/orders/ordersSlice";
+
+// Redux Selectors
+import {
+  selectFilteredOrders,
+  selectOrdersFilters,
+  selectOrderById,
+} from "@/store/features/orders/ordersSelectors";
+
+// UI Components
 import Modal from "@/components/UI/Modal/Modal";
 import OrderHeader from "./OrderHeader";
 import OrderFilters from "./OrderFilters";
 import OrderTable from "./OrderTable";
 import OrderDetails from "./OrderDetails";
 
-import { DUMMY_ORDERS, ORDER_STATUSES } from "@/constants/orders";
+// Constants
+import { ORDER_STATUSES } from "@/constants/orders";
 import styles from "./Orders.module.css";
 
 const Orders = () => {
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [filterStatus, setFilterStatus] = useState("all");
+  const dispatch = useDispatch();
+
+  // Redux State with defensive fallbacks
+  const orders = useSelector(selectFilteredOrders) || [];
+  const filters = useSelector(selectOrdersFilters) || {
+    status: "all",
+    searchTerm: "",
+  };
+  const selectedOrder = useSelector(selectOrderById);
+
+  const { status: filterStatus, searchTerm } = filters;
+
+  useEffect(() => {
+    dispatch(fetchOrders());
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
@@ -18,18 +51,25 @@ const Orders = () => {
 
       <OrderFilters
         filterStatus={filterStatus}
-        onStatusChange={setFilterStatus}
+        searchTerm={searchTerm}
+        onStatusChange={(val) => dispatch(setFilterStatus(val))}
+        onSearchChange={(val) => dispatch(setSearchTerm(val))}
         statuses={ORDER_STATUSES}
       />
 
-      <OrderTable orders={DUMMY_ORDERS} onViewDetails={setSelectedOrder} />
+      <OrderTable
+        orders={orders}
+        onViewDetails={(order) => dispatch(setSelectedOrderId(order.id))}
+      />
 
       <Modal
         isOpen={!!selectedOrder}
-        onClose={() => setSelectedOrder(null)}
-        title={`Order Details: ${selectedOrder?.id}`}
+        onClose={() => dispatch(clearOrderSelection())}
+        title={
+          selectedOrder ? `Order Details: ${selectedOrder.id}` : "Order Details"
+        }
       >
-        <OrderDetails order={selectedOrder} />
+        {selectedOrder && <OrderDetails order={selectedOrder} />}
       </Modal>
     </div>
   );
