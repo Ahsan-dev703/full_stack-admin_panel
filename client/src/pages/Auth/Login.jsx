@@ -23,6 +23,10 @@ const Login = () => {
     dispatch(loginUser(data));
   };
 
+  if (loading) {
+    return <Loader fullScreen text="Authenticating..." />;
+  }
+
   return (
     <div className={styles.authWrapper}>
       <LoginBrand />

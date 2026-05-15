@@ -6,6 +6,7 @@ import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import SettingsFooter from "./SettingsFooter";
 import { selectCurrentUser } from "@/store/features/auth/authSelectors";
+import Loader from "@/components/UI/Loader/Loader";
 import styles from "./Settings.module.css";
 
 const Settings = () => {
@@ -13,6 +14,11 @@ const Settings = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const user = useSelector(selectCurrentUser);
+  const { loading } = useSelector((state) => state.auth || { loading: false });
+
+  if (loading) {
+    return <Loader fullScreen text="Loading settings..." />;
+  }
 
   const handleSave = () => {
     setIsSaving(true);

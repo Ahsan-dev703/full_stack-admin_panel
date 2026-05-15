@@ -4,10 +4,16 @@ import ProfileForm from "./ProfileForm";
 import { SecurityCard, ActivityCard } from "./ProfileLog";
 import { RECENT_ACTIVITY } from "@/constants/profile";
 import { selectCurrentUser } from "@/store/features/auth/authSelectors";
+import Loader from "@/components/UI/Loader/Loader";
 import styles from "./Profile.module.css";
 
 const Profile = () => {
   const userData = useSelector(selectCurrentUser);
+  const { loading } = useSelector((state) => state.auth || { loading: false });
+
+  if (loading) {
+    return <Loader fullScreen text="Loading profile..." />;
+  }
 
   if (!userData) {
     return (

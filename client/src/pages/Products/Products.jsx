@@ -36,12 +36,29 @@ const Products = () => {
     searchTerm: "",
     category: "all",
   };
+  const { status, error } = useSelector(
+    (state) => state.products || { status: "idle", error: null },
+  );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    if (status === "idle") {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, status]);
+
+  if (status === "loading") {
+    return <Loader fullScreen text="Loading products..." />;
+  }
+
+  if (status === "failed") {
+    return (
+      <div className={styles.error}>
+        Unable to load products. Please try again later.
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>

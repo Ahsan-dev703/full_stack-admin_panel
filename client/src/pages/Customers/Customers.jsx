@@ -36,12 +36,11 @@ const Customers = () => {
   const selectedCustomer = useSelector(selectCurrentCustomer);
 
   // Directly accessing status to manage the fetch lifecycle
-  const { status } = useSelector(
-    (state) => state.customers || { status: "idle" },
+  const { status, error } = useSelector(
+    (state) => state.customers || { status: "idle", error: null },
   );
 
   useEffect(() => {
-    // Only fetch if we haven't already started or succeeded
     if (status === "idle") {
       dispatch(fetchCustomers());
     }
@@ -61,8 +60,12 @@ const Customers = () => {
         statusOptions={CUSTOMER_STATUSES}
       />
 
-      {status === "loading" && filteredCustomers.length === 0 ? (
-        <Loader />
+      {status === "loading" ? (
+        <Loader fullScreen text="Loading customers..." />
+      ) : status === "failed" ? (
+        <div className={styles.error}>
+          {error || "Unable to load customers, please try again."}
+        </div>
       ) : (
         <CustomerTable
           customers={filteredCustomers}

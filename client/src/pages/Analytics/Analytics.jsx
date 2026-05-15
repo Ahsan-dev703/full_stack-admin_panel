@@ -48,7 +48,7 @@ const Analytics = () => {
   }, [dispatch, status]);
 
   if (status === "loading") {
-    return <Loader />;
+    return <Loader fullScreen text="Loading analytics data..." />;
   }
 
   return (

@@ -49,7 +49,7 @@ const Dashboard = () => {
   }, [status, dispatch]);
 
   if (status === "loading") {
-    return <Loader />;
+    return <Loader fullScreen text="Loading dashboard data..." />;
   }
 
   // Error State Handling (Optional but recommended)

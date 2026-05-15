@@ -19,11 +19,7 @@ const Settings = lazy(() => import("@/pages/Settings/Settings"));
 const Login = lazy(() => import("@/pages/Auth/Login"));
 import Loader from "@/components/UI/Loader/Loader";
 
-const PageLoader = () => (
-  <div style={{ padding: "2rem" }}>
-    <Loader />
-  </div>
-);
+const PageLoader = () => <Loader fullScreen text="Loading page..." />;
 
 const AppRoutes = () => {
   return (

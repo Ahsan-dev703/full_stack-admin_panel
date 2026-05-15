@@ -27,6 +27,7 @@ import OrderDetails from "./OrderDetails";
 // Constants
 import { ORDER_STATUSES } from "@/constants/orders";
 import styles from "./Orders.module.css";
+import Loader from "@/components/UI/Loader/Loader";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -38,12 +39,29 @@ const Orders = () => {
     searchTerm: "",
   };
   const selectedOrder = useSelector(selectOrderById);
+  const { status: fetchStatus, error } = useSelector(
+    (state) => state.orders || { status: "idle", error: null },
+  );
 
   const { status: filterStatus, searchTerm } = filters;
 
   useEffect(() => {
-    dispatch(fetchOrders());
-  }, [dispatch]);
+    if (fetchStatus === "idle") {
+      dispatch(fetchOrders());
+    }
+  }, [dispatch, fetchStatus]);
+
+  if (fetchStatus === "loading") {
+    return <Loader fullScreen text="Loading orders..." />;
+  }
+
+  if (fetchStatus === "failed") {
+    return (
+      <div className={styles.error}>
+        {error || "Unable to load orders at this time."}
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
