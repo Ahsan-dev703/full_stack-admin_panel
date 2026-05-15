@@ -1,12 +1,15 @@
 import { MdMenu } from "react-icons/md";
+import { useSelector } from "react-redux";
 import NavSearch from "./NavSearch";
 import NavActions from "./NavActions";
 import UserDropdown from "./UserDropdown";
 import { useScroll } from "@/hooks/useScroll";
+import { selectCurrentUser } from "@/store/features/auth/authSelectors";
 import styles from "./Navbar.module.css";
 
 const Navbar = ({ onMenuClick }) => {
   const scrolled = useScroll(10);
+  const user = useSelector(selectCurrentUser);
 
   return (
     <header className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
@@ -24,7 +27,7 @@ const Navbar = ({ onMenuClick }) => {
 
       <div className={styles.right}>
         <NavActions />
-        <UserDropdown />
+        <UserDropdown user={user} />
       </div>
     </header>
   );

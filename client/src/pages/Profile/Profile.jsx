@@ -3,11 +3,22 @@ import ProfileIdentity from "./ProfileIdentity";
 import ProfileForm from "./ProfileForm";
 import { SecurityCard, ActivityCard } from "./ProfileLog";
 import { RECENT_ACTIVITY } from "@/constants/profile";
+import { selectCurrentUser } from "@/store/features/auth/authSelectors";
 import styles from "./Profile.module.css";
 
 const Profile = () => {
-  // Pulling live data from Redux
-  const userData = useSelector((state) => state.auth.user);
+  const userData = useSelector(selectCurrentUser);
+
+  if (!userData) {
+    return (
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <h1 className={styles.title}>Profile</h1>
+        </header>
+        <p>Please login to view your profile details.</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -16,7 +27,6 @@ const Profile = () => {
       </header>
 
       <div className={styles.grid}>
-        {/* Pass the global user data down */}
         <ProfileIdentity data={userData} />
 
         <div className={styles.rightCol}>

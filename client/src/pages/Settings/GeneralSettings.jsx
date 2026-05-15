@@ -1,22 +1,31 @@
 import styles from "./Settings.module.css";
 
-const GeneralSettings = () => (
+const GeneralSettings = ({ user }) => (
   <div className={styles.section}>
     <h3>General Settings</h3>
     <div className={styles.formGroup}>
-      <label>Store Name</label>
+      <label>Admin Name</label>
       <input
         type="text"
-        defaultValue="Modern Store Admin"
+        defaultValue={user?.name || "Muhammad Ahsan"}
         className={styles.input}
       />
     </div>
     <div className={styles.formGroup}>
-      <label>Store Email</label>
+      <label>Account Email</label>
       <input
         type="email"
-        defaultValue="admin@store.com"
+        defaultValue={user?.email || "admin@gmail.com"}
         className={styles.input}
+      />
+    </div>
+    <div className={styles.formGroup}>
+      <label>User Role</label>
+      <input
+        type="text"
+        defaultValue={user?.role || "Admin"}
+        className={styles.input}
+        disabled
       />
     </div>
     <div className={styles.toggleRow}>

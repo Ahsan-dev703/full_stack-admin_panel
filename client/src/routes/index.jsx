@@ -57,7 +57,6 @@ const AppRoutes = () => {
             <Route path={ROUTES.PRIVATE.CUSTOMERS} element={<Customers />} />
             <Route path={ROUTES.PRIVATE.SETTINGS} element={<Settings />} />
             <Route path={ROUTES.PRIVATE.PROFILE} element={<Profile />} />
-            <Route path="login" element={<Login />} />
           </Route>
         </Route>
 

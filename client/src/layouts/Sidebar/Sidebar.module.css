@@ -21,6 +21,40 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-main);
+}
+
+.profileAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.profileName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.profileRole {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .logoSquare {
   width: 32px;
   height: 32px;

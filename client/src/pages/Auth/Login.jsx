@@ -1,21 +1,26 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import LoginBrand from "./LoginBrand";
 import LoginForm from "./LoginForm";
+import { loginUser } from "@/store/features/auth/authThunks";
+import { selectIsAuthenticated } from "@/store/features/auth/authSelectors";
 import styles from "./Login.module.css";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { loading, error } = useSelector((state) => state.auth);
 
-  const handleLoginSubmit = async (data) => {
-    setLoading(true);
-    console.log("Logging in with:", data);
-
-    setTimeout(() => {
-      setLoading(false);
+  useEffect(() => {
+    if (isAuthenticated) {
       navigate("/");
-    }, 1200);
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleLoginSubmit = (data) => {
+    dispatch(loginUser(data));
   };
 
   return (
@@ -29,7 +34,11 @@ const Login = () => {
             <p>Enter your admin credentials to access the panel.</p>
           </header>
 
-          <LoginForm onSubmit={handleLoginSubmit} loading={loading} />
+          <LoginForm
+            onSubmit={handleLoginSubmit}
+            loading={loading}
+            error={error}
+          />
 
           <footer className={styles.footer}>
             <p>

@@ -1,32 +1,48 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { loadAuthState } from "@/utils/authStorage";
 
-const initialState = {
-  user: {
-    id: "USR-001",
-    name: "Admin User",
-    email: "admin@dashboard.com",
-    avatar: "https://i.pravatar.cc/150?u=admin",
-    phone: "+1 (555) 123-4567",
-    location: "New York, USA",
-    role: "Super Admin",
-  },
-  isAuthenticated: true,
+const persistedState = loadAuthState();
+
+const initialState = persistedState || {
+  user: null,
+  isAuthenticated: false,
   loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    updateProfile: (state, action) => {
-      state.user = { ...state.user, ...action.payload };
+    loginStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    loginSuccess: (state, action) => {
+      state.loading = false;
+      state.isAuthenticated = true;
+      state.user = action.payload;
+      state.error = null;
+    },
+    loginFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
+    },
+    updateProfile: (state, action) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
     },
   },
 });
 
-export const { updateProfile, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, updateProfile } =
+  authSlice.actions;
+
 export default authSlice.reducer;

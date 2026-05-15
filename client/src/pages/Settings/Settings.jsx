@@ -1,15 +1,18 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import Card from "@/components/UI/Card/Card";
 import SettingsSidebar from "./SettingsSidebar";
 import GeneralSettings from "./GeneralSettings";
 import SecuritySettings from "./SecuritySettings";
 import SettingsFooter from "./SettingsFooter";
+import { selectCurrentUser } from "@/store/features/auth/authSelectors";
 import styles from "./Settings.module.css";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("general");
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const user = useSelector(selectCurrentUser);
 
   const handleSave = () => {
     setIsSaving(true);
@@ -34,10 +37,8 @@ const Settings = () => {
 
         <main className={styles.content}>
           <Card className={styles.formCard}>
-            {activeTab === "general" && <GeneralSettings />}
+            {activeTab === "general" && <GeneralSettings user={user} />}
             {activeTab === "security" && <SecuritySettings />}
-
-            {/* You can easily add AccountSettings and NotificationSettings here later */}
 
             <SettingsFooter
               isSaving={isSaving}

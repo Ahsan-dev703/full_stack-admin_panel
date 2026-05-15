@@ -1,10 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ROUTES } from "@/constants/routes";
 
 const PublicRoute = () => {
-  // During testing, set this to false so it doesn't redirect you
-  // away from your work.
-  const isAuthenticated = false; // Replace with actual authentication logic
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return !isAuthenticated ? (
     <Outlet />

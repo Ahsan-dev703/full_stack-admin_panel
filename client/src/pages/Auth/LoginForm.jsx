@@ -9,13 +9,51 @@ import Input from "@/components/UI/Input/Input";
 import Button from "@/components/UI/Button/Button";
 import styles from "./Login.module.css";
 
-const LoginForm = ({ onSubmit, loading }) => {
+const LoginForm = ({ onSubmit, loading, error }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [validationError, setValidationError] = useState("");
+
+  const validateForm = () => {
+    const email = formData.email.trim();
+    const password = formData.password;
+
+    if (!email || !password) {
+      setValidationError("Please fill in both email and password.");
+      return false;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setValidationError("Please enter a valid email address.");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setValidationError("Password must be at least 6 characters.");
+      return false;
+    }
+
+    setValidationError("");
+    return true;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     onSubmit(formData);
+  };
+
+  const handleChange = (key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+    setValidationError("");
   };
 
   return (
@@ -23,10 +61,10 @@ const LoginForm = ({ onSubmit, loading }) => {
       <Input
         label="Email Address"
         type="email"
-        placeholder="admin@modernstore.com"
+        placeholder="admin@gmail.com"
         required
         value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        onChange={(e) => handleChange("email", e.target.value)}
       />
 
       <div className={styles.passwordArea}>
@@ -36,9 +74,7 @@ const LoginForm = ({ onSubmit, loading }) => {
           placeholder="Password"
           required
           value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
+          onChange={(e) => handleChange("password", e.target.value)}
         />
         <button
           type="button"
@@ -58,6 +94,10 @@ const LoginForm = ({ onSubmit, loading }) => {
           Forgot password?
         </Link>
       </div>
+
+      {(validationError || error) && (
+        <div className={styles.errorMessage}>{validationError || error}</div>
+      )}
 
       <Button type="submit" disabled={loading} className={styles.submitBtn}>
         {loading ? "Authenticating..." : "Login to Dashboard"}

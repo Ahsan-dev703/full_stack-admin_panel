@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ROUTES } from "@/constants/routes";
 
 const ProtectedRoute = () => {
-  const isAuthenticated = true; // Keep this true to access Products/Analytics
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return isAuthenticated ? (
     <Outlet />
